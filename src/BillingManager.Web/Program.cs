@@ -3,6 +3,8 @@ using Radzen;
 using BillingManager.Infrastructure.Data;
 using BillingManager.Application.Interfaces;
 using BillingManager.Infrastructure.Repositories;
+using BillingManager.Application.Services;
+using BillingManager.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +24,20 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBillRepository, BillRepository>();
 builder.Services.AddScoped<IPaymentModeRepository, PaymentModeRepository>();
+builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
+builder.Services.AddScoped<IFloorRepository, FloorRepository>();
+builder.Services.AddScoped<IUnitRepository, UnitRepository>();
+builder.Services.AddScoped<IReadingRepository, ReadingRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-// Add MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+// Add Services
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IBuildingService, BuildingService>();
+builder.Services.AddScoped<IFloorService, FloorService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<IReadingService, ReadingService>();
 
 var app = builder.Build();
 
@@ -51,4 +64,3 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
-

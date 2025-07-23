@@ -58,9 +58,9 @@
 /* Desktop Sidebar */
 @media (min-width: 992px) {
     .sidebar {
-        position: relative;
-        transform: translateX(0);
-        box-shadow: none;
+        position: fixed;
+        transform: translateX(0) !important;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         border-right: 1px solid rgba(255,255,255,0.1);
     }
     
@@ -232,13 +232,14 @@
 
 /* Main Content Adjustments */
 @media (min-width: 992px) {
-    .main {
-        margin-left: 280px;
+    main {
+        margin-left: 280px !important;
     }
 }
 
 @media (max-width: 991.98px) {
-    .main {
+    main {
+        margin-left: 0 !important;
         margin-top: 70px; /* Account for mobile header */
     }
 }
@@ -345,4 +346,3 @@
         background: rgba(0,0,0,0.4);
     }
 }
-

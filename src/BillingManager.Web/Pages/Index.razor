@@ -1,60 +1,214 @@
 @page "/"
+@inject NavigationManager Navigation
 
-<PageTitle>Home - Billing Manager</PageTitle>
+<PageTitle>Dashboard - Billing Manager</PageTitle>
 
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.H3" TagName="TagName.H1" class="rz-pt-8">
-        Welcome to Billing Manager
-    </RadzenText>
-    <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-pb-4">
-        Comprehensive billing solution for property management
-    </RadzenText>
-</RadzenCard>
+<!-- Welcome Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-white p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="mb-2 fw-bold">Welcome to Billing Manager</h2>
+                        <p class="mb-0 opacity-75">Comprehensive billing solution for property management</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <RadzenIcon Icon="dashboard" Style="font-size: 4rem; opacity: 0.3;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
-    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-        <RadzenCard>
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-                <RadzenIcon Icon="people" Style="font-size: 3rem; color: var(--rz-primary);" />
-                <RadzenStack Gap="0">
-                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Customers</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body2">Manage homeowners and tenants</RadzenText>
-                </RadzenStack>
-            </RadzenStack>
-        </RadzenCard>
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-        <RadzenCard>
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-                <RadzenIcon Icon="home" Style="font-size: 3rem; color: var(--rz-success);" />
-                <RadzenStack Gap="0">
-                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Properties</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body2">Buildings, floors, and units</RadzenText>
-                </RadzenStack>
-            </RadzenStack>
-        </RadzenCard>
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-        <RadzenCard>
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-                <RadzenIcon Icon="receipt" Style="font-size: 3rem; color: var(--rz-warning);" />
-                <RadzenStack Gap="0">
-                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Billing</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body2">Generate and manage bills</RadzenText>
-                </RadzenStack>
-            </RadzenStack>
-        </RadzenCard>
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-        <RadzenCard>
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-                <RadzenIcon Icon="payment" Style="font-size: 3rem; color: var(--rz-info);" />
-                <RadzenStack Gap="0">
-                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Collections</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body2">Process payments and collections</RadzenText>
-                </RadzenStack>
-            </RadzenStack>
-        </RadzenCard>
-    </RadzenColumn>
-</RadzenRow>
+<!-- Quick Stats -->
+<div class="row mb-4">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <RadzenIcon Icon="people" Style="font-size: 2.5rem; color: #3498db;" class="mb-3" />
+                <h4 class="fw-bold text-primary">0</h4>
+                <p class="text-muted mb-0">Total Customers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <RadzenIcon Icon="home" Style="font-size: 2.5rem; color: #27ae60;" class="mb-3" />
+                <h4 class="fw-bold text-success">0</h4>
+                <p class="text-muted mb-0">Active Units</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <RadzenIcon Icon="receipt" Style="font-size: 2.5rem; color: #f39c12;" class="mb-3" />
+                <h4 class="fw-bold text-warning">₱0.00</h4>
+                <p class="text-muted mb-0">Pending Bills</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <RadzenIcon Icon="payment" Style="font-size: 2.5rem; color: #e74c3c;" class="mb-3" />
+                <h4 class="fw-bold text-danger">₱0.00</h4>
+                <p class="text-muted mb-0">Overdue Amount</p>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0 fw-bold">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <RadzenButton Text="Manage Customers" 
+                                     Icon="people" 
+                                     ButtonStyle="ButtonStyle.Primary" 
+                                     Size="ButtonSize.Large"
+                                     Style="width: 100%; height: 80px;"
+                                     Click="@(() => Navigation.NavigateTo("/customers"))" />
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <RadzenButton Text="Manage Properties" 
+                                     Icon="home" 
+                                     ButtonStyle="ButtonStyle.Success" 
+                                     Size="ButtonSize.Large"
+                                     Style="width: 100%; height: 80px;"
+                                     Click="@(() => Navigation.NavigateTo("/buildings"))" />
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <RadzenButton Text="Generate Bills" 
+                                     Icon="receipt" 
+                                     ButtonStyle="ButtonStyle.Warning" 
+                                     Size="ButtonSize.Large"
+                                     Style="width: 100%; height: 80px;"
+                                     Click="@(() => Navigation.NavigateTo("/bill-generation"))" />
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <RadzenButton Text="Process Payments" 
+                                     Icon="payment" 
+                                     ButtonStyle="ButtonStyle.Info" 
+                                     Size="ButtonSize.Large"
+                                     Style="width: 100%; height: 80px;"
+                                     Click="@(() => Navigation.NavigateTo("/payments"))" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Modules -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0 fw-bold">System Modules</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Property Management -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <div class="card-body text-white text-center">
+                                <RadzenIcon Icon="apartment" Style="font-size: 3rem;" class="mb-3" />
+                                <h5 class="fw-bold">Property Management</h5>
+                                <p class="mb-3">Manage buildings, floors, and units</p>
+                                <RadzenButton Text="Access Module" 
+                                             ButtonStyle="ButtonStyle.Light" 
+                                             Size="ButtonSize.Small"
+                                             Click="@(() => Navigation.NavigateTo("/buildings"))" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Management -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <div class="card-body text-white text-center">
+                                <RadzenIcon Icon="people" Style="font-size: 3rem;" class="mb-3" />
+                                <h5 class="fw-bold">Customer Management</h5>
+                                <p class="mb-3">Manage homeowners and tenants</p>
+                                <RadzenButton Text="Access Module" 
+                                             ButtonStyle="ButtonStyle.Light" 
+                                             Size="ButtonSize.Small"
+                                             Click="@(() => Navigation.NavigateTo("/customers"))" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing & Invoicing -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <div class="card-body text-white text-center">
+                                <RadzenIcon Icon="receipt" Style="font-size: 3rem;" class="mb-3" />
+                                <h5 class="fw-bold">Billing & Invoicing</h5>
+                                <p class="mb-3">Generate and manage bills</p>
+                                <RadzenButton Text="Access Module" 
+                                             ButtonStyle="ButtonStyle.Light" 
+                                             Size="ButtonSize.Small"
+                                             Click="@(() => Navigation.NavigateTo("/bills"))" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Management -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                            <div class="card-body text-dark text-center">
+                                <RadzenIcon Icon="payment" Style="font-size: 3rem;" class="mb-3" />
+                                <h5 class="fw-bold">Payment Management</h5>
+                                <p class="mb-3">Process payments and collections</p>
+                                <RadzenButton Text="Access Module" 
+                                             ButtonStyle="ButtonStyle.Dark" 
+                                             Size="ButtonSize.Small"
+                                             Click="@(() => Navigation.NavigateTo("/payments"))" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reports & Analytics -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="card-body text-white text-center">
+                                <RadzenIcon Icon="assessment" Style="font-size: 3rem;" class="mb-3" />
+                                <h5 class="fw-bold">Reports & Analytics</h5>
+                                <p class="mb-3">Generate comprehensive reports</p>
+                                <RadzenButton Text="Access Module" 
+                                             ButtonStyle="ButtonStyle.Light" 
+                                             Size="ButtonSize.Small"
+                                             Click="@(() => Navigation.NavigateTo("/reports/soa"))" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Settings -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                            <div class="card-body text-dark text-center">
+                                <RadzenIcon Icon="settings" Style="font-size: 3rem;" class="mb-3" />
+                                <h5 class="fw-bold">System Settings</h5>
+                                <p class="mb-3">Configure system parameters</p>
+                                <RadzenButton Text="Access Module" 
+                                             ButtonStyle="ButtonStyle.Dark" 
+                                             Size="ButtonSize.Small"
+                                             Click="@(() => Navigation.NavigateTo("/settings/rates"))" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

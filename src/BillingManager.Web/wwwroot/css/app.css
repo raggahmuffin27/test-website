@@ -45,8 +45,7 @@ html, body {
 /* Main Content Area */
 main {
     flex: 1;
-    margin-left: 250px;
-    padding-left: 80px; /* Add gap after sidebar */
+    margin-left: 275px; /* 250px sidebar + 10% (25px) */
     min-height: 100vh;
     background-color: #f8f9fa;
     transition: margin-left 0.3s ease;

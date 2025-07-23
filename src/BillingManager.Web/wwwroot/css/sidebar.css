@@ -287,16 +287,14 @@
 /* Main Content Adjustments */
 @media (min-width: 992px) {
     main {
-        margin-left: 250px !important;
-        padding-left: 80px !important; /* Add 80px gap after sidebar */
+        margin-left: 275px !important; /* 250px sidebar + 10% (25px) */
         transition: all 0.3s ease-in-out;
     }
     
     /* Adjust main content when sidebar is collapsed */
     .sidebar-collapsed ~ main,
     main.sidebar-collapsed-content {
-        margin-left: 70px !important;
-        padding-left: 50px !important;
+        margin-left: 77px !important; /* 70px sidebar + 10% (7px) */
     }
 }
 
@@ -305,6 +303,7 @@
         margin-left: 0 !important;
         margin-top: 70px; /* Account for mobile header */
         padding-left: 20px !important; /* Smaller padding on mobile */
+        padding-right: 20px !important; /* Consistent mobile padding */
     }
 }
 

@@ -35,7 +35,8 @@ public class PaymentService : IPaymentService
     {
         payment.UpdatedAt = DateTime.UtcNow;
         
-        return await _paymentRepository.UpdateAsync(payment);
+        await _paymentRepository.UpdateAsync(payment);
+        return payment;
     }
 
     public async Task<bool> DeletePaymentAsync(int id)
@@ -76,4 +77,3 @@ public class PaymentService : IPaymentService
         return await _paymentRepository.GetOutstandingBalanceAsync(customerId);
     }
 }
-

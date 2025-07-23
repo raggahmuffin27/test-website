@@ -36,7 +36,8 @@ public class BillService : IBillService
     {
         bill.UpdatedAt = DateTime.UtcNow;
         
-        return await _billRepository.UpdateAsync(bill);
+        await _billRepository.UpdateAsync(bill);
+        return bill;
     }
 
     public async Task<bool> DeleteBillAsync(int id)
@@ -51,7 +52,7 @@ public class BillService : IBillService
 
     public async Task<IEnumerable<Bill>> GetBillsByCustomerIdAsync(int customerId)
     {
-        return await _billRepository.GetByCustomerIdAsync(customerId);
+        return await _billRepository.GetBillsByCustomerAsync(customerId);
     }
 
     public async Task<IEnumerable<Bill>> GetBillsByUnitIdAsync(int unitId)
@@ -92,4 +93,3 @@ public class BillService : IBillService
         return await _billRepository.GetTotalOutstandingAmountAsync(customerId);
     }
 }
-

@@ -35,7 +35,8 @@ public class FloorService : IFloorService
     {
         floor.UpdatedAt = DateTime.UtcNow;
         
-        return await _floorRepository.UpdateAsync(floor);
+        await _floorRepository.UpdateAsync(floor);
+        return floor;
     }
 
     public async Task<bool> DeleteFloorAsync(int id)
@@ -59,4 +60,3 @@ public class FloorService : IFloorService
         return floor != null;
     }
 }
-

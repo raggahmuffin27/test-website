@@ -36,7 +36,8 @@ public class ReadingService : IReadingService
     {
         reading.UpdatedAt = DateTime.UtcNow;
         
-        return await _readingRepository.UpdateAsync(reading);
+        await _readingRepository.UpdateAsync(reading);
+        return reading;
     }
 
     public async Task<bool> DeleteReadingAsync(int id)
@@ -75,4 +76,3 @@ public class ReadingService : IReadingService
         return await _readingRepository.GetForBillingPeriodAsync(startDate, endDate, type);
     }
 }
-

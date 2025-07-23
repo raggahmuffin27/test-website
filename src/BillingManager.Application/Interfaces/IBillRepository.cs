@@ -11,5 +11,7 @@ public interface IBillRepository : IRepository<Bill>
     Task<IEnumerable<Bill>> GetBillsByPeriodAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default);
     Task<IEnumerable<Bill>> GetBillsByTypeAsync(BillType billType, CancellationToken cancellationToken = default);
     Task<Bill?> GetBillWithDetailsAsync(int billId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Bill>> GetByStatusAsync(BillStatus status, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Bill>> GetByUnitIdAsync(int unitId, CancellationToken cancellationToken = default);
+    Task<decimal> GetTotalOutstandingAmountAsync(int customerId, CancellationToken cancellationToken = default);
 }
-

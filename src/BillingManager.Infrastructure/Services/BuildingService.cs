@@ -35,7 +35,8 @@ public class BuildingService : IBuildingService
     {
         building.UpdatedAt = DateTime.UtcNow;
         
-        return await _buildingRepository.UpdateAsync(building);
+        await _buildingRepository.UpdateAsync(building);
+        return building;
     }
 
     public async Task<bool> DeleteBuildingAsync(int id)
@@ -59,4 +60,3 @@ public class BuildingService : IBuildingService
         return await _buildingRepository.SearchAsync(searchTerm);
     }
 }
-

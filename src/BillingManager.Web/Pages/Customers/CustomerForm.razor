@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-md-8">
                 <RadzenCard>
-                    <RadzenTemplateForm Data="@customer" Submit="@OnSubmit">
+                    <RadzenTemplateForm Data="@customer" Submit="@OnSubmitCallback">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <RadzenFormField Text="First Name" Variant="Variant.Outlined">
@@ -156,6 +156,8 @@
     private bool IsEditMode => Id.HasValue && Navigation.Uri.Contains("/edit/");
     private bool IsViewMode => Id.HasValue && Navigation.Uri.Contains("/view/");
 
+    private EventCallback<Customer> OnSubmitCallback => EventCallback.Factory.Create<Customer>(this, OnSubmit);
+
     protected override async Task OnInitializedAsync()
     {
         if (Id.HasValue)
@@ -169,7 +171,7 @@
         isLoading = true;
         try
         {
-            var existingCustomer = await CustomerService.GetCustomerByIdAsync(Id.Value);
+            var existingCustomer = await CustomerService.GetCustomerByIdAsync(Id!.Value);
             if (existingCustomer != null)
             {
                 customer = existingCustomer;
@@ -191,19 +193,19 @@
         }
     }
 
-    private async Task OnSubmit()
+    private async Task OnSubmit(Customer submittedCustomer)
     {
         isSaving = true;
         try
         {
             if (IsCreateMode)
             {
-                await CustomerService.CreateCustomerAsync(customer);
+                await CustomerService.CreateCustomerAsync(submittedCustomer);
                 await JSRuntime.InvokeVoidAsync("alert", "Customer created successfully!");
             }
             else if (IsEditMode)
             {
-                await CustomerService.UpdateCustomerAsync(customer);
+                await CustomerService.UpdateCustomerAsync(submittedCustomer);
                 await JSRuntime.InvokeVoidAsync("alert", "Customer updated successfully!");
             }
 
@@ -232,4 +234,3 @@
         return IsCreateMode ? "Create Customer" : "Update Customer";
     }
 }
-

@@ -35,7 +35,8 @@ public class UnitService : IUnitService
     {
         unit.UpdatedAt = DateTime.UtcNow;
         
-        return await _unitRepository.UpdateAsync(unit);
+        await _unitRepository.UpdateAsync(unit);
+        return unit;
     }
 
     public async Task<bool> DeleteUnitAsync(int id)
@@ -74,4 +75,3 @@ public class UnitService : IUnitService
         return unit.MonthlyDuesRate * unit.FloorArea;
     }
 }
-

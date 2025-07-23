@@ -36,7 +36,8 @@ public class CustomerService : ICustomerService
     {
         customer.UpdatedAt = DateTime.UtcNow;
         
-        return await _customerRepository.UpdateAsync(customer);
+        await _customerRepository.UpdateAsync(customer);
+        return customer;
     }
 
     public async Task<bool> DeleteCustomerAsync(int id)
@@ -60,4 +61,3 @@ public class CustomerService : ICustomerService
         return await _customerRepository.SearchAsync(searchTerm);
     }
 }
-

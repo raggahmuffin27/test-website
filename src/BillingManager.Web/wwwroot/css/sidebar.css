@@ -2,7 +2,7 @@
 
 /* Mobile Header */
 .mobile-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #007bff;
     position: fixed;
     top: 0;
     left: 0;
@@ -23,8 +23,9 @@
     top: 0;
     left: 0;
     height: 100vh;
-    width: 280px;
-    background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+    width: 250px;
+    background: #ffffff;
+    border-right: 1px solid #e9ecef;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
     z-index: 1040;
@@ -71,8 +72,8 @@
 
 /* Sidebar Header */
 .sidebar-header {
-    background: rgba(0,0,0,0.2);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -81,6 +82,11 @@
 .sidebar-header h6 {
     font-weight: 600;
     letter-spacing: 0.5px;
+    color: #2c3e50;
+}
+
+.sidebar-header .text-light {
+    color: #6c757d !important;
 }
 
 /* Navigation Styles */
@@ -98,19 +104,22 @@
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: rgba(255,255,255,0.9);
+    color: #495057;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-weight: 500;
-    font-size: 0.9rem;
+    font-weight: 600;
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-left: 3px solid transparent;
+    background: #f8f9fa;
+    margin-bottom: 2px;
 }
 
 .nav-module-header:hover {
-    background: rgba(255,255,255,0.1);
-    border-left-color: #3498db;
+    background: #e9ecef;
+    border-left-color: #007bff;
+    color: #007bff;
 }
 
 .module-toggle {
@@ -149,41 +158,46 @@
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: rgba(255,255,255,0.8);
+    color: #6c757d;
     text-decoration: none;
     transition: all 0.2s ease;
     border-left: 3px solid transparent;
     font-size: 0.9rem;
+    margin-bottom: 1px;
 }
 
 .nav-link:hover {
-    color: white;
-    background: rgba(255,255,255,0.1);
-    border-left-color: #3498db;
+    color: #007bff;
+    background: #f8f9fa;
+    border-left-color: #007bff;
     text-decoration: none;
 }
 
 .nav-link.active {
-    color: white;
-    background: rgba(52, 152, 219, 0.2);
-    border-left-color: #3498db;
+    color: #007bff;
+    background: #e3f2fd;
+    border-left-color: #007bff;
     font-weight: 500;
 }
 
 /* Sub Navigation */
 .sub-nav {
-    padding-left: 3rem;
+    padding-left: 2.5rem;
     font-size: 0.85rem;
     border-left: 3px solid transparent;
+    color: #6c757d;
 }
 
 .sub-nav:hover {
-    border-left-color: #e74c3c;
+    border-left-color: #28a745;
+    color: #28a745;
+    background: #f8f9fa;
 }
 
 .sub-nav.active {
-    border-left-color: #e74c3c;
-    background: rgba(231, 76, 60, 0.1);
+    border-left-color: #28a745;
+    background: #e8f5e8;
+    color: #28a745;
 }
 
 /* Navigation Icons */
@@ -201,8 +215,12 @@
 /* Sidebar Footer */
 .sidebar-footer {
     margin-top: auto;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    background: rgba(0,0,0,0.2);
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+.sidebar-footer .text-light {
+    color: #6c757d !important;
 }
 
 /* Mobile Overlay */
@@ -233,7 +251,7 @@
 /* Main Content Adjustments */
 @media (min-width: 992px) {
     main {
-        margin-left: 280px !important;
+        margin-left: 250px !important;
     }
 }
 

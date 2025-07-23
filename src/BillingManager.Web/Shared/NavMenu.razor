@@ -14,12 +14,20 @@
 <div class="@GetSidebarCssClass">
     <!-- Sidebar Header -->
     <div class="sidebar-header">
-        <div class="d-flex align-items-center p-3">
-            <RadzenIcon Icon="account_balance" class="me-2 fs-4" style="color: #007bff;" />
-            <div class="d-none d-lg-block">
-                <h6 class="mb-0">💰 Billing Manager</h6>
-                <small class="text-muted">Property Management</small>
+        <div class="d-flex align-items-center justify-content-between p-3">
+            <div class="d-flex align-items-center">
+                <RadzenIcon Icon="account_balance" class="me-3 fs-2" style="color: #007bff;" />
+                <div class="sidebar-title-section">
+                    <h4 class="mb-0 fw-bold text-primary">💰 Billing Manager</h4>
+                    <small class="text-muted fs-6">Property Management System</small>
+                </div>
             </div>
+            <RadzenButton Icon="menu" 
+                         ButtonStyle="ButtonStyle.Light" 
+                         Size="ButtonSize.Small"
+                         Click="@ToggleNavMenu" 
+                         class="sidebar-toggle-btn d-lg-block" 
+                         title="Toggle Sidebar" />
         </div>
     </div>
 
@@ -191,6 +199,7 @@
 
 @code {
     private bool collapseNavMenu = true;
+    private bool sidebarCollapsed = false;
     private HashSet<string> expandedModules = new(); // No modules expanded by default
 
     private string GetSidebarCssClass()
@@ -198,6 +207,8 @@
         var baseClass = "sidebar";
         if (!collapseNavMenu)
             baseClass += " sidebar-open";
+        if (sidebarCollapsed)
+            baseClass += " sidebar-collapsed";
         return baseClass;
     }
 
@@ -208,7 +219,18 @@
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        // On desktop, toggle collapsed state
+        if (IsDesktop())
+        {
+            sidebarCollapsed = !sidebarCollapsed;
+            // Update main content class via JavaScript
+            UpdateMainContentClass();
+        }
+        else
+        {
+            // On mobile, toggle visibility
+            collapseNavMenu = !collapseNavMenu;
+        }
     }
 
     private void CollapseNavMenu()
@@ -218,6 +240,9 @@
 
     private void ToggleModule(string moduleId)
     {
+        // Don't allow module expansion when sidebar is collapsed
+        if (sidebarCollapsed) return;
+        
         if (expandedModules.Contains(moduleId))
         {
             expandedModules.Remove(moduleId);
@@ -226,5 +251,17 @@
         {
             expandedModules.Add(moduleId);
         }
+    }
+    
+    private bool IsDesktop()
+    {
+        // Simple check - in a real app you might use JS interop for window size
+        return true; // For now, assume desktop behavior
+    }
+    
+    private void UpdateMainContentClass()
+    {
+        // This would typically use JS interop to update the main element class
+        // For now, we'll rely on CSS selectors
     }
 }

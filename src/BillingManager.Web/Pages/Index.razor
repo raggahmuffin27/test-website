@@ -1,0 +1,60 @@
+@page "/"
+
+<PageTitle>Home - Billing Manager</PageTitle>
+
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.H3" TagName="TagName.H1" class="rz-pt-8">
+        Welcome to Billing Manager
+    </RadzenText>
+    <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-pb-4">
+        Comprehensive billing solution for property management
+    </RadzenText>
+</RadzenCard>
+
+<RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+        <RadzenCard>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                <RadzenIcon Icon="people" Style="font-size: 3rem; color: var(--rz-primary);" />
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Customers</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2">Manage homeowners and tenants</RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+        <RadzenCard>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                <RadzenIcon Icon="home" Style="font-size: 3rem; color: var(--rz-success);" />
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Properties</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2">Buildings, floors, and units</RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+        <RadzenCard>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                <RadzenIcon Icon="receipt" Style="font-size: 3rem; color: var(--rz-warning);" />
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Billing</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2">Generate and manage bills</RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+        <RadzenCard>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                <RadzenIcon Icon="payment" Style="font-size: 3rem; color: var(--rz-info);" />
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3" class="rz-mb-0">Collections</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2">Process payments and collections</RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>
+

@@ -46,6 +46,7 @@ html, body {
 main {
     flex: 1;
     margin-left: 250px;
+    padding-left: 80px; /* Add gap after sidebar */
     min-height: 100vh;
     background-color: #f8f9fa;
     transition: margin-left 0.3s ease;
@@ -74,6 +75,20 @@ main {
     padding: 2rem;
     max-width: 100%;
     overflow-x: auto;
+}
+
+/* Ensure proper spacing on desktop */
+@media (min-width: 992px) {
+    .content {
+        padding-right: 2rem;
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 991.98px) {
+    .content {
+        padding: 1rem;
+    }
 }
 
 /* Card Styles */

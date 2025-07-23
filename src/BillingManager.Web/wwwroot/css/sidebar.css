@@ -252,6 +252,7 @@
 @media (min-width: 992px) {
     main {
         margin-left: 250px !important;
+        padding-left: 80px !important; /* Add 80px gap after sidebar */
     }
 }
 
@@ -259,6 +260,7 @@
     main {
         margin-left: 0 !important;
         margin-top: 70px; /* Account for mobile header */
+        padding-left: 20px !important; /* Smaller padding on mobile */
     }
 }
 

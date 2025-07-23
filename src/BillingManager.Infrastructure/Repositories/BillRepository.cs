@@ -66,9 +66,9 @@ public class BillRepository : Repository<Bill>, IBillRepository
             .Include(b => b.Unit)
                 .ThenInclude(u => u.Floor)
                     .ThenInclude(f => f.Building)
-            .Include(b => b.Payments)
-                .ThenInclude(p => p.PaymentMode)
+            .Include(b => b.PaymentBills)
+                .ThenInclude(pb => pb.Payment)
+                    .ThenInclude(p => p.PaymentMode)
             .FirstOrDefaultAsync(b => b.Id == billId, cancellationToken);
     }
 }
-

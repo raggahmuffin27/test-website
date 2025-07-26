@@ -1,0 +1,236 @@
+@page "/customers/create"
+@page "/customers/edit/{Id:int}"
+@page "/customers/view/{Id:int}"
+@using BillingManager.Application.Services
+@using BillingManager.Domain.Entities
+@inject ICustomerService CustomerService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<PageTitle>@GetPageTitle()</PageTitle>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>@GetPageTitle()</h3>
+        </div>
+        <div class="col-auto">
+            <RadzenButton Text="Back to List" 
+                         Icon="arrow_back" 
+                         ButtonStyle="ButtonStyle.Secondary" 
+                         Click="@(() => Navigation.NavigateTo("/customers"))" />
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center">
+            <RadzenProgressBarCircular ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+            <p>Loading...</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <RadzenCard>
+                    <RadzenTemplateForm Data="@customer" Submit="@OnSubmitCallback">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <RadzenFormField Text="First Name" Variant="Variant.Outlined">
+                                    <RadzenTextBox @bind-Value="customer.FirstName" 
+                                                  Name="FirstName" 
+                                                  Disabled="@IsViewMode"
+                                                  Style="width: 100%" />
+                                    <RadzenRequiredValidator Component="FirstName" Text="First name is required" />
+                                </RadzenFormField>
+                            </div>
+                            <div class="col-md-6">
+                                <RadzenFormField Text="Last Name" Variant="Variant.Outlined">
+                                    <RadzenTextBox @bind-Value="customer.LastName" 
+                                                  Name="LastName" 
+                                                  Disabled="@IsViewMode"
+                                                  Style="width: 100%" />
+                                    <RadzenRequiredValidator Component="LastName" Text="Last name is required" />
+                                </RadzenFormField>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <RadzenFormField Text="Email" Variant="Variant.Outlined">
+                                    <RadzenTextBox @bind-Value="customer.Email" 
+                                                  Name="Email" 
+                                                  Disabled="@IsViewMode"
+                                                  Style="width: 100%" />
+                                    <RadzenEmailValidator Component="Email" Text="Enter a valid email" />
+                                </RadzenFormField>
+                            </div>
+                            <div class="col-md-6">
+                                <RadzenFormField Text="Phone Number" Variant="Variant.Outlined">
+                                    <RadzenTextBox @bind-Value="customer.PhoneNumber" 
+                                                  Name="PhoneNumber" 
+                                                  Disabled="@IsViewMode"
+                                                  Style="width: 100%" />
+                                </RadzenFormField>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <RadzenFormField Text="Address" Variant="Variant.Outlined">
+                                    <RadzenTextArea @bind-Value="customer.Address" 
+                                                   Name="Address" 
+                                                   Disabled="@IsViewMode"
+                                                   Rows="3" 
+                                                   Style="width: 100%" />
+                                </RadzenFormField>
+                            </div>
+                        </div>
+
+                        @if (IsEditMode)
+                        {
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <RadzenFormField Text="Created At" Variant="Variant.Outlined">
+                                        <RadzenDatePicker @bind-Value="customer.CreatedAt" 
+                                                         Disabled="true" 
+                                                         ShowTime="true"
+                                                         Style="width: 100%" />
+                                    </RadzenFormField>
+                                </div>
+                                <div class="col-md-6">
+                                    <RadzenFormField Text="Updated At" Variant="Variant.Outlined">
+                                        <RadzenDatePicker @bind-Value="customer.UpdatedAt" 
+                                                         Disabled="true" 
+                                                         ShowTime="true"
+                                                         Style="width: 100%" />
+                                    </RadzenFormField>
+                                </div>
+                            </div>
+                        }
+
+                        @if (!IsViewMode)
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <RadzenButton ButtonType="ButtonType.Submit" 
+                                                 Text="@GetSubmitButtonText()" 
+                                                 Icon="save" 
+                                                 ButtonStyle="ButtonStyle.Primary" 
+                                                 IsBusy="@isSaving" />
+                                    <RadzenButton Text="Cancel" 
+                                                 Icon="cancel" 
+                                                 ButtonStyle="ButtonStyle.Light" 
+                                                 Click="@(() => Navigation.NavigateTo("/customers"))" 
+                                                 Style="margin-left: 10px;" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <RadzenButton Text="Edit" 
+                                                 Icon="edit" 
+                                                 ButtonStyle="ButtonStyle.Warning" 
+                                                 Click="@(() => Navigation.NavigateTo($"/customers/edit/{Id}"))" />
+                                </div>
+                            </div>
+                        }
+                    </RadzenTemplateForm>
+                </RadzenCard>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    private Customer customer = new();
+    private bool isLoading = false;
+    private bool isSaving = false;
+
+    private bool IsCreateMode => !Id.HasValue;
+    private bool IsEditMode => Id.HasValue && Navigation.Uri.Contains("/edit/");
+    private bool IsViewMode => Id.HasValue && Navigation.Uri.Contains("/view/");
+
+    private EventCallback<Customer> OnSubmitCallback => EventCallback.Factory.Create<Customer>(this, OnSubmit);
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            await LoadCustomer();
+        }
+    }
+
+    private async Task LoadCustomer()
+    {
+        isLoading = true;
+        try
+        {
+            var existingCustomer = await CustomerService.GetCustomerByIdAsync(Id!.Value);
+            if (existingCustomer != null)
+            {
+                customer = existingCustomer;
+            }
+            else
+            {
+                // Customer not found, redirect to list
+                Navigation.NavigateTo("/customers");
+            }
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error loading customer: {ex.Message}");
+            Navigation.NavigateTo("/customers");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task OnSubmit(Customer submittedCustomer)
+    {
+        isSaving = true;
+        try
+        {
+            if (IsCreateMode)
+            {
+                await CustomerService.CreateCustomerAsync(submittedCustomer);
+                await JSRuntime.InvokeVoidAsync("alert", "Customer created successfully!");
+            }
+            else if (IsEditMode)
+            {
+                await CustomerService.UpdateCustomerAsync(submittedCustomer);
+                await JSRuntime.InvokeVoidAsync("alert", "Customer updated successfully!");
+            }
+
+            Navigation.NavigateTo("/customers");
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error saving customer: {ex.Message}");
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    private string GetPageTitle()
+    {
+        if (IsCreateMode) return "Create Customer";
+        if (IsEditMode) return "Edit Customer";
+        if (IsViewMode) return "View Customer";
+        return "Customer";
+    }
+
+    private string GetSubmitButtonText()
+    {
+        return IsCreateMode ? "Create Customer" : "Update Customer";
+    }
+}

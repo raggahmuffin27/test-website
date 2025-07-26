@@ -1,65 +1,267 @@
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Billing Manager</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<!-- Mobile Header -->
+<div class="mobile-header d-lg-none">
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <h5 class="mb-0 text-white">💰 Billing Manager</h5>
+        <RadzenButton Icon="menu" 
+                     ButtonStyle="ButtonStyle.Light" 
+                     Size="ButtonSize.Small"
+                     Click="@ToggleNavMenu" 
+                     class="mobile-menu-toggle" />
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="CollapseNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
+<!-- Sidebar Navigation -->
+<div class="@GetSidebarCssClass">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+        <div class="d-flex align-items-center justify-content-between p-3">
+            <div class="d-flex align-items-center">
+                <RadzenIcon Icon="account_balance" class="me-3 fs-2" style="color: #007bff;" />
+                <div class="sidebar-title-section">
+                    <h4 class="mb-0 fw-bold text-primary">💰 Billing Manager</h4>
+                    <small class="text-muted fs-6">Property Management System</small>
+                </div>
+            </div>
+            <RadzenButton Icon="menu" 
+                         ButtonStyle="ButtonStyle.Light" 
+                         Size="ButtonSize.Small"
+                         Click="@ToggleNavMenu" 
+                         class="sidebar-toggle-btn d-lg-block" 
+                         title="Toggle Sidebar" />
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="customers">
-                <span class="oi oi-people" aria-hidden="true"></span> Customers
-            </NavLink>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+        <!-- Dashboard Module -->
+        <div class="nav-module">
+            <div class="nav-item">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="dashboard" class="nav-icon" />
+                    <span class="nav-text">Dashboard</span>
+                </NavLink>
+            </div>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="buildings">
-                <span class="oi oi-home" aria-hidden="true"></span> Buildings
-            </NavLink>
+
+        <!-- Property Management Module -->
+        <div class="nav-module">
+            <div class="nav-module-header" @onclick="@(() => ToggleModule("property"))">
+                <RadzenIcon Icon="@(expandedModules.Contains("property") ? "expand_less" : "expand_more")" class="module-toggle" />
+                <RadzenIcon Icon="apartment" class="module-icon" />
+                <span class="module-title">Property Management</span>
+            </div>
+            <div class="nav-module-content @(expandedModules.Contains("property") ? "expanded" : "collapsed")">
+                <NavLink class="nav-link sub-nav" href="buildings" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="business" class="nav-icon" />
+                    <span class="nav-text">Buildings</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="floors" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="layers" class="nav-icon" />
+                    <span class="nav-text">Floors</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="units" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="home" class="nav-icon" />
+                    <span class="nav-text">Units</span>
+                </NavLink>
+            </div>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="bills">
-                <span class="oi oi-document" aria-hidden="true"></span> Bills
-            </NavLink>
+
+        <!-- Customer Management Module -->
+        <div class="nav-module">
+            <div class="nav-module-header" @onclick="@(() => ToggleModule("customer"))">
+                <RadzenIcon Icon="@(expandedModules.Contains("customer") ? "expand_less" : "expand_more")" class="module-toggle" />
+                <RadzenIcon Icon="people" class="module-icon" />
+                <span class="module-title">Customer Management</span>
+            </div>
+            <div class="nav-module-content @(expandedModules.Contains("customer") ? "expanded" : "collapsed")">
+                <NavLink class="nav-link sub-nav" href="customers" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="person" class="nav-icon" />
+                    <span class="nav-text">Customers</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="customer-units" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="assignment_ind" class="nav-icon" />
+                    <span class="nav-text">Unit Assignments</span>
+                </NavLink>
+            </div>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="payments">
-                <span class="oi oi-dollar" aria-hidden="true"></span> Payments
-            </NavLink>
+
+        <!-- Billing Module -->
+        <div class="nav-module">
+            <div class="nav-module-header" @onclick="@(() => ToggleModule("billing"))">
+                <RadzenIcon Icon="@(expandedModules.Contains("billing") ? "expand_less" : "expand_more")" class="module-toggle" />
+                <RadzenIcon Icon="receipt" class="module-icon" />
+                <span class="module-title">Billing & Invoicing</span>
+            </div>
+            <div class="nav-module-content @(expandedModules.Contains("billing") ? "expanded" : "collapsed")">
+                <NavLink class="nav-link sub-nav" href="bills" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="description" class="nav-icon" />
+                    <span class="nav-text">Bills</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="bill-generation" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="auto_awesome" class="nav-icon" />
+                    <span class="nav-text">Generate Bills</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="readings" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="speed" class="nav-icon" />
+                    <span class="nav-text">Meter Readings</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="penalties" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="warning" class="nav-icon" />
+                    <span class="nav-text">Penalties</span>
+                </NavLink>
+            </div>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="reports">
-                <span class="oi oi-bar-chart" aria-hidden="true"></span> Reports
-            </NavLink>
+
+        <!-- Payment Module -->
+        <div class="nav-module">
+            <div class="nav-module-header" @onclick="@(() => ToggleModule("payment"))">
+                <RadzenIcon Icon="@(expandedModules.Contains("payment") ? "expand_less" : "expand_more")" class="module-toggle" />
+                <RadzenIcon Icon="payment" class="module-icon" />
+                <span class="module-title">Payment Management</span>
+            </div>
+            <div class="nav-module-content @(expandedModules.Contains("payment") ? "expanded" : "collapsed")">
+                <NavLink class="nav-link sub-nav" href="payments" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="payments" class="nav-icon" />
+                    <span class="nav-text">Payments</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="collections" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="account_balance_wallet" class="nav-icon" />
+                    <span class="nav-text">Collections</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="outstanding-balance" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="account_balance" class="nav-icon" />
+                    <span class="nav-text">Outstanding Balance</span>
+                </NavLink>
+            </div>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="settings">
-                <span class="oi oi-cog" aria-hidden="true"></span> Settings
-            </NavLink>
+
+        <!-- Reports Module -->
+        <div class="nav-module">
+            <div class="nav-module-header" @onclick="@(() => ToggleModule("reports"))">
+                <RadzenIcon Icon="@(expandedModules.Contains("reports") ? "expand_less" : "expand_more")" class="module-toggle" />
+                <RadzenIcon Icon="assessment" class="module-icon" />
+                <span class="module-title">Reports & Analytics</span>
+            </div>
+            <div class="nav-module-content @(expandedModules.Contains("reports") ? "expanded" : "collapsed")">
+                <NavLink class="nav-link sub-nav" href="reports/soa" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="article" class="nav-icon" />
+                    <span class="nav-text">Statement of Account</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="reports/billing-summary" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="summarize" class="nav-icon" />
+                    <span class="nav-text">Billing Summary</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="reports/collection" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="trending_up" class="nav-icon" />
+                    <span class="nav-text">Collection Reports</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="reports/overdue" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="schedule" class="nav-icon" />
+                    <span class="nav-text">Overdue Reports</span>
+                </NavLink>
+            </div>
+        </div>
+
+        <!-- Settings Module -->
+        <div class="nav-module">
+            <div class="nav-module-header" @onclick="@(() => ToggleModule("settings"))">
+                <RadzenIcon Icon="@(expandedModules.Contains("settings") ? "expand_less" : "expand_more")" class="module-toggle" />
+                <RadzenIcon Icon="settings" class="module-icon" />
+                <span class="module-title">System Settings</span>
+            </div>
+            <div class="nav-module-content @(expandedModules.Contains("settings") ? "expanded" : "collapsed")">
+                <NavLink class="nav-link sub-nav" href="settings/rates" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="monetization_on" class="nav-icon" />
+                    <span class="nav-text">Billing Rates</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="settings/payment-modes" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="credit_card" class="nav-icon" />
+                    <span class="nav-text">Payment Modes</span>
+                </NavLink>
+                <NavLink class="nav-link sub-nav" href="settings/system" @onclick="CollapseNavMenu">
+                    <RadzenIcon Icon="tune" class="nav-icon" />
+                    <span class="nav-text">System Config</span>
+                </NavLink>
+            </div>
         </div>
     </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        <div class="p-3 text-center">
+            <small class="text-muted">© 2024 Billing Manager</small>
+        </div>
+    </div>
 </div>
+
+<!-- Mobile Overlay -->
+<div class="@GetOverlayCssClass" @onclick="CollapseNavMenu"></div>
 
 @code {
     private bool collapseNavMenu = true;
+    private bool sidebarCollapsed = false;
+    private HashSet<string> expandedModules = new(); // No modules expanded by default
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string GetSidebarCssClass()
+    {
+        var baseClass = "sidebar";
+        if (!collapseNavMenu)
+            baseClass += " sidebar-open";
+        if (sidebarCollapsed)
+            baseClass += " sidebar-collapsed";
+        return baseClass;
+    }
+
+    private string GetOverlayCssClass()
+    {
+        return collapseNavMenu ? "mobile-overlay" : "mobile-overlay mobile-overlay-visible";
+    }
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        // On desktop, toggle collapsed state
+        if (IsDesktop())
+        {
+            sidebarCollapsed = !sidebarCollapsed;
+            // Update main content class via JavaScript
+            UpdateMainContentClass();
+        }
+        else
+        {
+            // On mobile, toggle visibility
+            collapseNavMenu = !collapseNavMenu;
+        }
     }
 
     private void CollapseNavMenu()
     {
         collapseNavMenu = true;
     }
-}
 
+    private void ToggleModule(string moduleId)
+    {
+        // Don't allow module expansion when sidebar is collapsed
+        if (sidebarCollapsed) return;
+        
+        if (expandedModules.Contains(moduleId))
+        {
+            expandedModules.Remove(moduleId);
+        }
+        else
+        {
+            expandedModules.Add(moduleId);
+        }
+    }
+    
+    private bool IsDesktop()
+    {
+        // Simple check - in a real app you might use JS interop for window size
+        return true; // For now, assume desktop behavior
+    }
+    
+    private void UpdateMainContentClass()
+    {
+        // This would typically use JS interop to update the main element class
+        // For now, we'll rely on CSS selectors
+    }
+}

@@ -66,9 +66,34 @@ public class BillRepository : Repository<Bill>, IBillRepository
             .Include(b => b.Unit)
                 .ThenInclude(u => u.Floor)
                     .ThenInclude(f => f.Building)
-            .Include(b => b.Payments)
-                .ThenInclude(p => p.PaymentMode)
+            .Include(b => b.PaymentBills)
+                .ThenInclude(pb => pb.Payment)
+                    .ThenInclude(p => p.PaymentMode)
             .FirstOrDefaultAsync(b => b.Id == billId, cancellationToken);
     }
-}
 
+    public async Task<IEnumerable<Bill>> GetByStatusAsync(BillStatus status, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(b => b.Status == status)
+            .Include(b => b.Customer)
+            .Include(b => b.Unit)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Bill>> GetByUnitIdAsync(int unitId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(b => b.UnitId == unitId)
+            .Include(b => b.Customer)
+            .Include(b => b.Unit)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<decimal> GetTotalOutstandingAmountAsync(int customerId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(b => b.CustomerId == customerId && (b.Status == BillStatus.Pending || b.Status == BillStatus.Overdue || b.Status == BillStatus.PartiallyPaid))
+            .SumAsync(b => b.TotalAmount, cancellationToken);
+    }
+}

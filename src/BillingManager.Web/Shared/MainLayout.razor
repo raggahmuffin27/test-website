@@ -1,27 +1,41 @@
-@inherits LayoutView
+@inherits LayoutComponentBase
 @inject DialogService DialogService
 @inject NotificationService NotificationService
 @inject TooltipService TooltipService
 @inject ContextMenuService ContextMenuService
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <!-- Navigation Menu -->
+    <NavMenu />
 
+    <!-- Main Content Area -->
     <main>
-        <div class="top-row px-4">
-            <h1>Billing Manager</h1>
+        <div class="top-row">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">💰 Billing Manager</h1>
+                <div class="d-flex align-items-center">
+                    <span class="text-muted me-3">Property Management System</span>
+                    <RadzenButton Icon="notifications" 
+                                 ButtonStyle="ButtonStyle.Light" 
+                                 Size="ButtonSize.Small"
+                                 class="me-2" />
+                    <RadzenButton Icon="account_circle" 
+                                 ButtonStyle="ButtonStyle.Light" 
+                                 Size="ButtonSize.Small" />
+                </div>
+            </div>
         </div>
 
-        <article class="content px-4">
-            @Body
+        <article class="content">
+            <div class="fade-in">
+                @Body
+            </div>
         </article>
     </main>
 </div>
 
+<!-- Radzen Components -->
 <RadzenDialog />
 <RadzenNotification />
 <RadzenTooltip />
 <RadzenContextMenu />
-

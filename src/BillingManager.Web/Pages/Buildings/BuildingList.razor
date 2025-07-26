@@ -1,0 +1,182 @@
+@page "/buildings"
+@using BillingManager.Application.Services
+@using BillingManager.Domain.Entities
+@inject IBuildingService BuildingService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Buildings</PageTitle>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Building Management</h3>
+        </div>
+        <div class="col-auto">
+            <RadzenButton Text="Add Building" 
+                         Icon="add" 
+                         ButtonStyle="ButtonStyle.Primary" 
+                         Click="@(() => Navigation.NavigateTo("/buildings/create"))" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <RadzenTextBox @bind-Value="searchTerm" 
+                          Placeholder="Search buildings..." 
+                          Style="width: 100%"
+                          @oninput="OnSearchInput" />
+        </div>
+        <div class="col-md-2">
+            <RadzenButton Text="Search" 
+                         Icon="search" 
+                         Click="SearchBuildings" 
+                         ButtonStyle="ButtonStyle.Secondary" />
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center">
+            <RadzenProgressBarCircular ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+            <p>Loading buildings...</p>
+        </div>
+    }
+    else
+    {
+        <RadzenDataGrid @ref="buildingsGrid" 
+                       Data="@buildings" 
+                       TItem="Building" 
+                       AllowPaging="true" 
+                       PageSize="10"
+                       AllowSorting="true" 
+                       AllowFiltering="true"
+                       FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                       Style="width: 100%">
+            <Columns>
+                <RadzenDataGridColumn TItem="Building" Property="Id" Title="ID" Width="80px" />
+                <RadzenDataGridColumn TItem="Building" Property="Name" Title="Building Name" />
+                <RadzenDataGridColumn TItem="Building" Property="Address" Title="Address" />
+                <RadzenDataGridColumn TItem="Building" Property="CreatedAt" Title="Created" FormatString="{0:MM/dd/yyyy}" />
+                <RadzenDataGridColumn TItem="Building" Title="Actions" Width="200px" Sortable="false" Filterable="false">
+                    <Template Context="building">
+                        <RadzenButton Icon="visibility" 
+                                     ButtonStyle="ButtonStyle.Info" 
+                                     Size="ButtonSize.Small" 
+                                     Click="@(() => ViewBuilding(building.Id))" 
+                                     title="View" />
+                        <RadzenButton Icon="edit" 
+                                     ButtonStyle="ButtonStyle.Warning" 
+                                     Size="ButtonSize.Small" 
+                                     Click="@(() => EditBuilding(building.Id))" 
+                                     title="Edit" />
+                        <RadzenButton Icon="delete" 
+                                     ButtonStyle="ButtonStyle.Danger" 
+                                     Size="ButtonSize.Small" 
+                                     Click="@(() => DeleteBuilding(building))" 
+                                     title="Delete" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    }
+</div>
+
+@code {
+    private IEnumerable<Building> buildings = new List<Building>();
+    private RadzenDataGrid<Building> buildingsGrid = new();
+    private bool isLoading = true;
+    private string searchTerm = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBuildings();
+    }
+
+    private async Task LoadBuildings()
+    {
+        isLoading = true;
+        try
+        {
+            buildings = await BuildingService.GetAllBuildingsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading buildings: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task SearchBuildings()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            await LoadBuildings();
+        }
+        else
+        {
+            isLoading = true;
+            try
+            {
+                buildings = await BuildingService.SearchBuildingsAsync(searchTerm);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error searching buildings: {ex.Message}");
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
+    }
+
+    private async Task OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            await LoadBuildings();
+        }
+    }
+
+    private void ViewBuilding(int buildingId)
+    {
+        Navigation.NavigateTo($"/buildings/view/{buildingId}");
+    }
+
+    private void EditBuilding(int buildingId)
+    {
+        Navigation.NavigateTo($"/buildings/edit/{buildingId}");
+    }
+
+    private async Task DeleteBuilding(Building building)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", 
+            $"Are you sure you want to delete building '{building.Name}'?");
+        
+        if (confirmed)
+        {
+            try
+            {
+                var success = await BuildingService.DeleteBuildingAsync(building.Id);
+                if (success)
+                {
+                    await LoadBuildings();
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Failed to delete building.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", $"Error deleting building: {ex.Message}");
+            }
+        }
+    }
+}
+

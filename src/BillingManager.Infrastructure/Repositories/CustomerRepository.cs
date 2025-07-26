@@ -29,5 +29,14 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
                     .ThenInclude(f => f.Building)
             .ToListAsync(cancellationToken);
     }
-}
 
+    public async Task<IEnumerable<Customer>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(c => c.FirstName.Contains(searchTerm) || 
+                       c.LastName.Contains(searchTerm) || 
+                       c.Email.Contains(searchTerm) ||
+                       c.PhoneNumber.Contains(searchTerm))
+            .ToListAsync(cancellationToken);
+    }
+}

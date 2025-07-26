@@ -1,0 +1,187 @@
+@page "/customers"
+@using BillingManager.Application.Services
+@using BillingManager.Domain.Entities
+@inject ICustomerService CustomerService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Customers</PageTitle>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Customer Management</h3>
+        </div>
+        <div class="col-auto">
+            <RadzenButton Text="Add Customer" 
+                         Icon="add" 
+                         ButtonStyle="ButtonStyle.Primary" 
+                         Click="@(() => Navigation.NavigateTo("/customers/create"))" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <RadzenTextBox @bind-Value="searchTerm" 
+                          Placeholder="Search customers..." 
+                          Style="width: 100%"
+                          @oninput="OnSearchInput" />
+        </div>
+        <div class="col-md-2">
+            <RadzenButton Text="Search" 
+                         Icon="search" 
+                         Click="SearchCustomers" 
+                         ButtonStyle="ButtonStyle.Secondary" />
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center">
+            <RadzenProgressBarCircular ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+            <p>Loading customers...</p>
+        </div>
+    }
+    else
+    {
+        <RadzenDataGrid @ref="customersGrid" 
+                       Data="@customers" 
+                       TItem="Customer" 
+                       AllowPaging="true" 
+                       PageSize="10"
+                       AllowSorting="true" 
+                       AllowFiltering="true"
+                       FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                       Style="width: 100%">
+            <Columns>
+                <RadzenDataGridColumn TItem="Customer" Property="Id" Title="ID" Width="80px" />
+                <RadzenDataGridColumn TItem="Customer" Property="FirstName" Title="First Name" />
+                <RadzenDataGridColumn TItem="Customer" Property="LastName" Title="Last Name" />
+                <RadzenDataGridColumn TItem="Customer" Property="Email" Title="Email" />
+                <RadzenDataGridColumn TItem="Customer" Property="PhoneNumber" Title="Phone" />
+                <RadzenDataGridColumn TItem="Customer" Property="CreatedAt" Title="Created" FormatString="{0:MM/dd/yyyy}" />
+                <RadzenDataGridColumn TItem="Customer" Title="Actions" Width="200px" Sortable="false" Filterable="false">
+                    <Template Context="customer">
+                        <RadzenButton Icon="visibility" 
+                                     ButtonStyle="ButtonStyle.Info" 
+                                     Size="ButtonSize.Small" 
+                                     Click="@(() => ViewCustomer(customer.Id))" 
+                                     title="View" />
+                        <RadzenButton Icon="edit" 
+                                     ButtonStyle="ButtonStyle.Warning" 
+                                     Size="ButtonSize.Small" 
+                                     Click="@(() => EditCustomer(customer.Id))" 
+                                     title="Edit" />
+                        <RadzenButton Icon="delete" 
+                                     ButtonStyle="ButtonStyle.Danger" 
+                                     Size="ButtonSize.Small" 
+                                     Click="@(() => DeleteCustomer(customer))" 
+                                     title="Delete" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    }
+</div>
+
+@code {
+    private IEnumerable<Customer> customers = new List<Customer>();
+    private RadzenDataGrid<Customer> customersGrid = new();
+    private bool isLoading = true;
+    private string searchTerm = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCustomers();
+    }
+
+    private async Task LoadCustomers()
+    {
+        isLoading = true;
+        try
+        {
+            customers = await CustomerService.GetAllCustomersAsync();
+        }
+        catch (Exception ex)
+        {
+            // Handle error - could show notification
+            Console.WriteLine($"Error loading customers: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task SearchCustomers()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            await LoadCustomers();
+        }
+        else
+        {
+            isLoading = true;
+            try
+            {
+                customers = await CustomerService.SearchCustomersAsync(searchTerm);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error searching customers: {ex.Message}");
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
+    }
+
+    private async Task OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            await LoadCustomers();
+        }
+    }
+
+    private void ViewCustomer(int customerId)
+    {
+        Navigation.NavigateTo($"/customers/view/{customerId}");
+    }
+
+    private void EditCustomer(int customerId)
+    {
+        Navigation.NavigateTo($"/customers/edit/{customerId}");
+    }
+
+    private async Task DeleteCustomer(Customer customer)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", 
+            $"Are you sure you want to delete customer '{customer.FirstName} {customer.LastName}'?");
+        
+        if (confirmed)
+        {
+            try
+            {
+                var success = await CustomerService.DeleteCustomerAsync(customer.Id);
+                if (success)
+                {
+                    await LoadCustomers(); // Refresh the list
+                    // Could show success notification here
+                }
+                else
+                {
+                    // Could show error notification here
+                    await JSRuntime.InvokeVoidAsync("alert", "Failed to delete customer.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", $"Error deleting customer: {ex.Message}");
+            }
+        }
+    }
+}
+

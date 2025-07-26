@@ -35,10 +35,9 @@ public class Bill : BaseEntity
     // Navigation properties
     public virtual Customer Customer { get; set; } = null!;
     public virtual Unit Unit { get; set; } = null!;
-    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+    public virtual ICollection<PaymentBill> PaymentBills { get; set; } = new List<PaymentBill>();
 
     // Methods
     public bool IsOverdue => Status == BillStatus.Pending && DateTime.Now > DueDate;
     public bool IsFullyPaid => PaidAmount >= TotalAmount;
 }
-

@@ -57,23 +57,6 @@ public class BillConfiguration : IEntityTypeConfiguration<Bill>
             .HasForeignKey(b => b.UnitId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(b => b.Payments)
-            .WithMany(p => p.Bills)
-            .UsingEntity<PaymentBill>(
-                j => j
-                    .HasOne(pb => pb.Payment)
-                    .WithMany(p => p.PaymentBills)
-                    .HasForeignKey(pb => pb.PaymentId),
-                j => j
-                    .HasOne(pb => pb.Bill)
-                    .WithMany()
-                    .HasForeignKey(pb => pb.BillId),
-                j =>
-                {
-                    j.HasKey(pb => pb.Id);
-                    j.Property(pb => pb.AmountPaid).HasColumnType("decimal(18,2)");
-                    j.Property(pb => pb.Notes).HasMaxLength(500);
-                });
+        // PaymentBill relationship configured through PaymentBill entity
     }
 }
-

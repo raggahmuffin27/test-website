@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Radzen.Blazor" Version="4.32.0" />
-    <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7" />
   </ItemGroup>
 
@@ -19,4 +18,3 @@
   </ItemGroup>
 
 </Project>
-

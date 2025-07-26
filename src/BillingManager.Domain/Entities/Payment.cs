@@ -11,6 +11,7 @@ public class Payment : BaseEntity
     public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
     public string? ReferenceNumber { get; set; }
     public string? Notes { get; set; }
+    public bool IsAdvancePayment { get; set; } = false;
 
     // Foreign keys
     public int CustomerId { get; set; }
@@ -21,4 +22,3 @@ public class Payment : BaseEntity
     public virtual PaymentMode PaymentMode { get; set; } = null!;
     public virtual ICollection<PaymentBill> PaymentBills { get; set; } = new List<PaymentBill>();
 }
-

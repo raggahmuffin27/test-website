@@ -20,6 +20,7 @@ public class BillingDbContext : DbContext
     public DbSet<Payment> Payments { get; set; }
     public DbSet<PaymentMode> PaymentModes { get; set; }
     public DbSet<PaymentBill> PaymentBills { get; set; }
+    public DbSet<Reading> Readings { get; set; }
     public DbSet<WaterRate> WaterRates { get; set; }
     public DbSet<ElectricityRate> ElectricityRates { get; set; }
     public DbSet<PenaltyRate> PenaltyRates { get; set; }
